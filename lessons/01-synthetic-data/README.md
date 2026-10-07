@@ -44,7 +44,7 @@ source ../../steps/07-evaluate.sh
 | 분리 | `scripts/split_meta_v2_dataset.py` | `split.json`, 장면별 80/10/10 분리 |
 | 내보내기 | `scripts/export_meta_v2*_dataset*.py` | `smoke120_models/a1_objectseg`, `smoke120_face` |
 | 학습 | `perception/training/train_segmentation.py` | 회차 루트 `runs/perception/smoke120_{a1,face}/weights/best.pt`, `recipe.json` |
-| 평가 | `yolo segment val` | test 분할의 box/mask 점수 |
+| 평가 | `yolo segment val` | test split의 box/mask 점수 |
 
 원시 렌더 폴더의 호환용 data.yaml로 바로 학습하지 않습니다. 내보낸 YAML의 클래스 순서와 train/val/test 경로를 확인합니다. 같은 run 이름은 재사용할 수 없으므로 재학습은 `--name`을 바꾸고 평가 경로도 맞춥니다.
 
@@ -60,6 +60,21 @@ yolo segment predict model=runs/perception/smoke120_a1/weights/best.pt source=my
 
 이 명령은 형태만 찾습니다. 과일은 큐브 영역을 잘라 면 모델에 `imgsz=224`로 넣어야 합니다. OpenCV numpy 입력은 BGR 순서입니다. PIL에서 얻은 RGB 배열은 먼저 BGR로 바꿉니다.
 
+## 입력 사진과 segmentation 예측 비교하기
+
+학습한 면 모델과 큐브 크롭 사진을 준비한 후 회차 루트에서 실행합니다.
+
+```bash
+python scripts/predict_examples.py \
+  --model runs/perception/smoke120_face/weights/best.pt \
+  --source crop-apple.jpg crop-orange.jpg crop-banana.jpg \
+  --output runs/prediction-examples --imgsz 224 --device cpu
+```
+
+각 사진마다 입력 사진과 예측 mask를 나란히 저장합니다. 하단 숫자는 면별 confidence입니다. `inference-examples.json`에는 가중치·입력 파일의 SHA256과 실행 설정, 예측 좌표를 기록합니다. 형태 모델이라면 `--model`을 A1 가중치로, `--imgsz`를 640으로 바꿉니다.
+
+[MERO 강의자료의 네 가지 예시](https://mero-website-one.vercel.app/education/object-recognition/synthetic-data#evaluate)는 프로젝트의 기존 공개 면 가중치로 실제 카메라 크롭에 직접 추론한 결과입니다. 첫 실습의 120장·1 epoch 가중치로 만든 결과는 아닙니다.
+
 ## 확장
 
 이 회차는 한 Blender worker만 지원합니다. `steps/full-render.sh`는 GPU/50,000장/샘플16 설정이며 장시간 작업입니다. GPU Torch 환경과 저장공간을 확인한 후 사용하세요. 출력 이름이 `public_fruits360_arena_v1`로 바뀌므로 split/export/train/evaluate 경로도 모두 맞춥니다. 전체 학습 설정은 아래 원본 재현 문서에 있습니다.
@@ -72,6 +87,6 @@ yolo segment predict model=runs/perception/smoke120_a1/weights/best.pt source=my
 
 - [원본 재현 문서](https://github.com/YenCho/ddonggae/blob/d85758c752e6cd3244e16d9ea4a3d2831da225b4/perception/docs/synthetic-data-reproduction.md)
 - `UPSTREAM.json`에 원본 파일의 커밋과 SHA256을 기록했습니다.
-- 교육용 런처는 이메일/감시/멀티 worker 코드를 제거하고 렌더러에 옵션을 전달합니다. 원본 렌더러·분리·내보내기·학습 계산은 그대로 유지합니다. 첫 실습은 CPU/120장/1 epoch/batch4로 축소했습니다. 보조 분류기 데이터는 만들지 않습니다.
+- 교육용 런처는 이메일/감시/멀티 worker 코드를 제거하고 렌더러에 옵션을 전달합니다. 원본 렌더러·분리·내보내기·학습 계산은 그대로 유지합니다. 첫 실습은 CPU/120장/1 epoch/batch4로 축소했습니다. 보조 classifier 데이터는 만들지 않습니다.
 - 코드 컴파일, 셸 문법, 인자 전달과 분리 manifest를 검증합니다. 전체 120장 렌더와 학습을 이 패키징 과정에서 새로 실행한 것은 아닙니다.
 - 원본 소스 MIT. Ultralytics 및 파생 가중치 AGPL-3.0. 다운로드되는 Fruits-360 CC BY-SA 4.0 출처 파일을 데이터와 함께 유지합니다. [원본 라이선스](../../LICENSE).
