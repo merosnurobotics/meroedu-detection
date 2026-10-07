@@ -1,0 +1,10 @@
+blenderproc==2.8.0
+bpy==5.0.1
+numpy==1.26.4
+opencv-python==4.10.0.84
+Pillow==11.1.0
+PyYAML==6.0.2
+tqdm==4.67.1
+ultralytics==8.4.54
+torch==2.10.0
+torchvision==0.25.0

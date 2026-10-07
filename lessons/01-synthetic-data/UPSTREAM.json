@@ -1,0 +1,42 @@
+[
+  {
+    "path": "perception/generation/prepare_assets.py",
+    "source": "YenCho/ddonggae@d85758c752e6cd3244e16d9ea4a3d2831da225b4:perception/generation/prepare_assets.py",
+    "sha256": "2be013a429594d54beea166a3eb3a13ca2b96cd88444071d8ac67f582034bbe6"
+  },
+  {
+    "path": "perception/generation/scripts/generate_yolo_coco_composite.py",
+    "source": "YenCho/ddonggae@d85758c752e6cd3244e16d9ea4a3d2831da225b4:perception/generation/scripts/generate_yolo_coco_composite.py",
+    "sha256": "f5c386ad55cf1bd0f6dd6a403abbf68a7f0344152df13583ec9f0363c65f9173"
+  },
+  {
+    "path": "perception/generation/scripts/make_polyhedron_objs.py",
+    "source": "YenCho/ddonggae@d85758c752e6cd3244e16d9ea4a3d2831da225b4:perception/generation/scripts/make_polyhedron_objs.py",
+    "sha256": "fa6aec5517709e288be8e502bb55db2886b70657af6e68ffd363732a81ddc9cd"
+  },
+  {
+    "path": "perception/generation/scripts/split_meta_v2_dataset.py",
+    "source": "YenCho/ddonggae@d85758c752e6cd3244e16d9ea4a3d2831da225b4:perception/generation/scripts/split_meta_v2_dataset.py",
+    "sha256": "4977f0991dfde21200cad519e9aa1c20980aad554fa878d27efd334270541a8f"
+  },
+  {
+    "path": "perception/generation/scripts/export_meta_v2_model_datasets.py",
+    "source": "YenCho/ddonggae@d85758c752e6cd3244e16d9ea4a3d2831da225b4:perception/generation/scripts/export_meta_v2_model_datasets.py",
+    "sha256": "f4197bf22b032ae2018b0cc9c1356766b9fe7ff7355b2fa6f39a0e222f2d62da"
+  },
+  {
+    "path": "perception/generation/scripts/export_meta_v2_cube_face_unified_dataset.py",
+    "source": "YenCho/ddonggae@d85758c752e6cd3244e16d9ea4a3d2831da225b4:perception/generation/scripts/export_meta_v2_cube_face_unified_dataset.py",
+    "sha256": "375e1a7c79e63ecaaefd6ede66d34879672c47eaca97f27714793d6b358893eb"
+  },
+  {
+    "path": "perception/generation/scripts/download_coco2017_backgrounds.py",
+    "source": "YenCho/ddonggae@d85758c752e6cd3244e16d9ea4a3d2831da225b4:perception/generation/scripts/download_coco2017_backgrounds.py",
+    "sha256": "d8eab78229cd0e3f43e50d59b50f32849c8204f1b4af6e4b769b25d24c7406da"
+  },
+  {
+    "path": "perception/training/train_segmentation.py",
+    "source": "YenCho/ddonggae@d85758c752e6cd3244e16d9ea4a3d2831da225b4:perception/training/train_segmentation.py",
+    "sha256": "b7af47c849d778e58f67327a2e300218ab146840463ea466bdf4962c3113e70c"
+  }
+]
