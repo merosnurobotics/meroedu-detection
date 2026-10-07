@@ -4,7 +4,7 @@
 
 ## 먼저 이해할 것
 
-- 분류는 이미지가 무엇인지, 검출은 무엇이 어디에 있는지, 인스턴스 분할은 각 물체의 픽셀 영역을 묻습니다. 이 실습은 YOLO 분할 모델을 사용합니다.
+- Classification은 이미지가 무엇인지, detection은 무엇이 어디에 있는지, instance segmentation은 각 물체의 픽셀 영역을 묻습니다. 이 실습은 YOLO segmentation 모델을 사용합니다.
 - 지도학습에는 이미지와 라벨(정답)이 함께 필요합니다. 합성 데이터는 Blender에서 이미지와 보이는 물체의 경계를 함께 계산해 만듭니다.
 - 배경·회전·조명 등을 바꾸는 도메인 랜덤화는 우연한 배경 단서에 의존하지 않도록 돕습니다. 실제 카메라에서 잘 작동하는지는 별도 사진으로 확인해야 합니다.
 - A1은 전체 사진에서 큐브형/정팔면체/정십이면체/정이십면체를 찾습니다. 면 모델은 큐브 크롭에서 apple/orange/banana/pineapple/plain을 찾습니다. 클래스 순서를 바꾸지 않습니다.
@@ -73,19 +73,19 @@ python scripts/predict_examples.py \
 
 각 사진마다 입력 사진과 예측 mask를 나란히 저장합니다. 하단 숫자는 면별 confidence입니다. `inference-examples.json`에는 가중치·입력 파일의 SHA256과 실행 설정, 예측 좌표를 기록합니다. 형태 모델이라면 `--model`을 A1 가중치로, `--imgsz`를 640으로 바꿉니다.
 
-[MERO 강의자료의 네 가지 예시](https://mero-website-one.vercel.app/education/object-recognition/synthetic-data#evaluate)는 프로젝트의 기존 공개 면 가중치로 실제 카메라 크롭에 직접 추론한 결과입니다. 첫 실습의 120장·1 epoch 가중치로 만든 결과는 아닙니다.
+[MERO 강의자료의 네 가지 예시](https://mero-website-one.vercel.app/education/object-recognition/synthetic-data#evaluate)는 미리 학습된 면 가중치로 실제 카메라 크롭에 직접 추론한 결과입니다. 첫 실습의 120장·1 epoch 가중치로 만든 결과는 아닙니다.
 
 ## 확장
 
-이 회차는 한 Blender worker만 지원합니다. `steps/full-render.sh`는 GPU/50,000장/샘플16 설정이며 장시간 작업입니다. GPU Torch 환경과 저장공간을 확인한 후 사용하세요. 출력 이름이 `public_fruits360_arena_v1`로 바뀌므로 split/export/train/evaluate 경로도 모두 맞춥니다. 전체 학습 설정은 아래 원본 재현 문서에 있습니다.
+이 회차는 한 Blender worker만 지원합니다. `steps/full-render.sh`는 GPU/50,000장/샘플16 설정이며 장시간 작업입니다. GPU Torch 환경과 저장공간을 확인한 후 사용하세요. 출력 이름이 `public_fruits360_arena_v1`로 바뀌므로 split/export/train/evaluate 경로도 모두 맞춥니다. 전체 학습 설정과 분리·내보내기·학습·평가 명령은 [FULL_RECIPE.md](FULL_RECIPE.md)에 있습니다.
 
-당시 실험은 COCO 사진 배경을 사용했지만 공개 기본 레시피는 경기장 배경(`arena_background_ratio=1.0`)을 생성합니다. COCO 실험은 `download_coco2017_backgrounds.py --split val2017`로 준비한 JPG 폴더를 사용하고 ratio를 0.0으로 바꾸며, 새로운 seed와 출력 폴더로 별도 평가합니다.
+기본 레시피는 방 형태의 배경(`arena_background_ratio=1.0`)을 생성합니다. COCO 실험은 `download_coco2017_backgrounds.py --split val2017`로 준비한 JPG 폴더를 사용하고 ratio를 0.0으로 바꾸며, 새로운 seed와 출력 폴더로 별도 평가합니다.
 
-약 5만 장/정다면체 약 5천 장은 프로젝트 경험치이며 모든 문제의 최소 장수가 아닙니다. 실제 그림 크기, 반사, 흐림과 클래스 분포가 중요합니다. 대회 후반의 면 모델은 실제 사진 추가 학습도 사용했습니다.
+데이터 장수는 고정된 정답이 아닙니다. 실제 그림 크기, 반사, 흐림과 클래스 분포를 확인하고, 학습에 사용하지 않은 실제 사진에서 성능을 평가합니다.
 
 ## 출처·변경·검증 범위
 
-- [원본 재현 문서](https://github.com/YenCho/ddonggae/blob/d85758c752e6cd3244e16d9ea4a3d2831da225b4/perception/docs/synthetic-data-reproduction.md)
+- [전체 학습 설정과 실행 순서](FULL_RECIPE.md)
 - `UPSTREAM.json`에 원본 파일의 커밋과 SHA256을 기록했습니다.
 - 교육용 런처는 이메일/감시/멀티 worker 코드를 제거하고 렌더러에 옵션을 전달합니다. 원본 렌더러·분리·내보내기·학습 계산은 그대로 유지합니다. 첫 실습은 CPU/120장/1 epoch/batch4로 축소했습니다. 보조 classifier 데이터는 만들지 않습니다.
 - 코드 컴파일, 셸 문법, 인자 전달과 분리 manifest를 검증합니다. 전체 120장 렌더와 학습을 이 패키징 과정에서 새로 실행한 것은 아닙니다.
